@@ -1,0 +1,51 @@
+# Never disabled by 03-debloat.sh. Lines starting with "re:" are regular expressions.
+# On top of this list, lib.sh protects what it discovers on the TV itself:
+# the app that switches to HDMI, every package that provides a TV input, and the active keyboard.
+
+# --- core system: disabling these can stop the TV from booting or being controlled
+com.android.systemui
+com.android.tv.settings            # Settings app
+com.android.settings
+com.android.shell                  # needed for ADB, i.e. for restore.sh
+com.android.packageinstaller
+com.google.android.packageinstaller
+com.android.permissioncontroller
+com.google.android.permissioncontroller
+com.android.externalstorage
+com.android.bluetooth              # Bluetooth remote
+com.android.inputdevices
+com.android.keychain
+com.android.certinstaller
+com.android.location.fused
+com.android.dynsystem
+re:com\.android\.providers\..*     # settings/media/downloads/TV-channel databases
+re:com\.(google\.)?android\.networkstack.*
+re:com\.android\.(wifi|server\.telecom|phone).*
+re:com\.(google\.)?android\.ext\..*
+re:com\.(google\.)?android\.modulemetadata
+re:com\.android\.(cellbroadcast|ons|se|nfc|tethering).*
+
+# --- Google services the apps you use depend on
+com.google.android.gms             # Play Services (YouTube, Netflix sign-in, Cast all need it)
+com.google.android.gsf
+com.android.vending                # Play Store (app updates)
+com.google.android.webview
+com.android.webview
+com.google.android.tungsten.setupwraith   # setup wizard; disabling it can break the HOME key on some builds
+com.google.android.tv.remote.service      # remote pairing + voice button
+
+# --- kept at your request
+com.google.android.katniss         # voice search / Assistant
+com.google.android.apps.mediashell # Google Cast (Chromecast built-in)
+re:.*(miracast|wfd|mirror|screencast|screenshare).*   # screen mirroring
+
+# --- your dock apps
+com.google.android.youtube.tv
+com.netflix.ninja
+com.amazon.amazonvideo.livingroom
+com.crunchyroll.crunchyroid
+com.spotify.tv.android
+
+# --- keyboards
+com.google.android.inputmethod.latin   # Gboard for TV
+com.google.android.leanback.ime        # older TV keyboard

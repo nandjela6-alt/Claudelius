@@ -1,0 +1,19 @@
+# Known Android TV ads/telemetry/junk packages. Only a starting point: 02-inventory.sh marks
+# which of these exist on YOUR TV, and nothing is disabled until you approve a list.
+# Format: package  # category: reason
+com.google.android.tvlauncher             # ads: stock home screen with sponsored rows (only after TV Home is working)
+com.google.android.tvrecommendations      # ads: feeds "recommended"/sponsored channels to the stock home screen
+com.google.android.leanbacklauncher       # ads: older stock home screen, if present
+com.google.android.leanbacklauncher.recommendations # ads: recommendations for the old home screen
+com.google.android.feedback               # telemetry: sends feedback/crash reports to Google
+com.google.android.tv.bugreportsender     # telemetry: bug report uploader
+com.google.android.tvhomescreenchannels   # ads: preview channels on the stock home
+com.google.android.backdrop               # junk: Ambient Mode screensaver (fetches photos/art online)
+com.google.android.play.games             # junk: Play Games
+com.google.android.videos                 # junk: Google Play Movies & TV / Google TV store
+com.google.android.youtube.tvmusic        # app: YouTube Music (you may use this - ask)
+com.google.android.youtube.tvkids         # app: YouTube Kids
+com.google.android.marvin.talkback        # accessibility: TalkBack screen reader (ask if anyone needs it)
+com.android.printspooler                  # junk: printing (no printer on a TV)
+com.android.gallery3d                     # junk: photo gallery
+com.android.musicfx                       # junk: audio effects panel (some TVs use it for sound modes - test)

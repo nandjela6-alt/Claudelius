@@ -1,0 +1,6 @@
+# build output
+build/
+# signing key stays local; never commit private keys
+keystore/
+# backups, change log, screenshots, wallpapers: personal, stays on your computer
+state/
