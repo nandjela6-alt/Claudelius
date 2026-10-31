@@ -7,8 +7,8 @@
 source "$(dirname "$0")/lib.sh"
 KEEP_LAUNCHER=no; [ "${1:-}" = --keep-launcher ] && KEEP_LAUNCHER=yes
 connect
-BACKUP="$STATE/backup/latest"
-[ -d "$BACKUP" ] || { echo "No backup in $STATE/backup. Was 01-backup.sh run from this folder?" >&2; exit 1; }
+BACKUP="$(original_backup)"
+[ -n "$BACKUP" ] || { echo "No backup in $STATE/backup. Was 01-backup.sh run from this folder?" >&2; exit 1; }
 
 orig_home="$(cat "$BACKUP/home-activity.txt")"
 
@@ -46,8 +46,23 @@ comm -13 "$BACKUP/packages-disabled.txt" "$STATE/.disabled-now" | sed 's/^packag
 done
 rm -f "$STATE/.disabled-now"
 
+# 2b) Settings this project can change (tune.sh): put back the values from the original backup.
+for k in window_animation_scale transition_animation_scale animator_duration_scale; do
+  orig="$(grep "^$k=" "$BACKUP/settings-global.txt" | cut -d= -f2- || true)"
+  now="$(tsh settings get global "$k")"
+  if [ -z "$orig" ] && [ "$now" != null ]; then tsh settings delete global "$k" >/dev/null; echo "setting   global $k removed (safety net)"
+  elif [ -n "$orig" ] && [ "$now" != "$orig" ]; then tsh settings put global "$k" "$orig"; echo "setting   global $k = $orig (safety net)"; fi
+done
+
+# 2c) TV Home was not on the TV originally: remove it (unless --keep-launcher).
+if [ "$KEEP_LAUNCHER" = no ] && pkg_installed "$LAUNCHER_PKG" \
+   && ! grep -q "package:.*=$LAUNCHER_PKG\b\|package:$LAUNCHER_PKG\b" "$BACKUP/packages-all.txt"; then
+  a uninstall "$LAUNCHER_PKG" >/dev/null && echo "removed   $LAUNCHER_PKG (TV Home, safety net)"
+fi
+
 # 3) Make sure the original home screen is the default again.
-if [ "$KEEP_LAUNCHER" = no ] && [ -n "$orig_home" ] && [ "$(current_home)" != "$orig_home" ]; then
+#    Done unconditionally: the stored preference can differ from what resolve-activity reports.
+if [ "$KEEP_LAUNCHER" = no ] && [ -n "$orig_home" ]; then
   tsh cmd package set-home-activity --user 0 "$orig_home" >/dev/null || true
 fi
 home

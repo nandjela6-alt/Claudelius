@@ -5,7 +5,7 @@ source "$(dirname "$0")/lib.sh"
 APK="${APK:-$ROOT/dist/tvhome.apk}"
 WALL="${WALL:-$STATE/wallpapers}"
 connect
-[ -d "$STATE/backup/latest" ] || { echo "No backup found. Run 01-backup.sh first." >&2; exit 1; }
+[ -n "$(original_backup)" ] || { echo "No backup found. Run 01-backup.sh first." >&2; exit 1; }
 
 was_installed=no; pkg_installed "$LAUNCHER_PKG" && was_installed=yes
 a install -r "$APK"

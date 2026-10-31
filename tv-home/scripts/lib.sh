@@ -50,6 +50,13 @@ current_home() {
   tsh cmd package resolve-activity --brief -a android.intent.action.MAIN -c android.intent.category.HOME | tail -1
 }
 
+# Folder of the first backup ever taken (the untouched state), or empty.
+original_backup() {
+  local b; b="$(cat "$STATE/backup/ORIGINAL" 2>/dev/null || true)"
+  [ -n "$b" ] && [ -d "$b" ] && echo "$b"
+  return 0
+}
+
 pkg_installed() { tsh pm list packages "$1" | grep -qx "package:$1"; }
 pkg_disabled()  { tsh pm list packages -d "$1" | grep -qx "package:$1"; }
 

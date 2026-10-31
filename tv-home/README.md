@@ -33,7 +33,8 @@ build `RTM4.220307.154`, security patch 1 May 2022, kernel 4.19.116.
 * **Checked with screenshots.** Every script that changes something saves a screenshot to
   `state/screenshots/`.
 * The scripts were tested end to end against a simulated TV (fake `adb`): backup → debloat →
-  install → tune → restore came back byte-identical to the original package and settings state.
+  install → tune → restore came back identical to the original packages, settings and home screen,
+  both with the change log and with the change log deleted.
   They have **not** run against the real TV yet.
 
 ## What has and hasn't been verified for the app
@@ -43,7 +44,14 @@ build `RTM4.220307.154`, security patch 1 May 2022, kernel 4.19.116.
 * **Not yet run on Android**: no emulator or device was available where it was built.
   First install on the TV is the real test, which is why every step takes a screenshot.
 
-## Run it (on a Mac/Linux computer on the same Wi-Fi as the TV)
+## Windows
+
+The scripts are bash: run them in **Git Bash** (installed with Git for Windows), not PowerShell.
+* ADB: `winget install Google.PlatformTools` in PowerShell, then open a new Git Bash window
+  and check that `adb version` works.
+* Python: use `py scripts/fetch-wallpapers.py` if `python3` isn't found.
+
+## Run it (on a computer on the same Wi-Fi as the TV)
 
 1. On the TV: Settings → Device Preferences → Info → press "Build" 7× → Developer options →
    enable **USB debugging** (on Android TV this usually also opens network ADB on port 5555; if `00-connect.sh` cannot reach the TV, look for a separate "Network debugging" switch). Find the TV's IP under
@@ -67,7 +75,8 @@ build `RTM4.220307.154`, security patch 1 May 2022, kernel 4.19.116.
    then reboot and check (screenshot) that TV Home comes back after the reboot.
 
 **Undo everything:** `TV=192.168.x.y scripts/restore.sh` (or `--keep-launcher` to keep TV Home).
-Keep the `state/` folder: it holds the backup that restore checks against.
+Keep the `state/` folder: `state/backup/ORIGINAL` points at the first backup (the untouched TV),
+which restore always compares against, even if you take more backups later or the change log is lost.
 
 ## Using TV Home
 

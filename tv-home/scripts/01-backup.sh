@@ -19,7 +19,10 @@ tsh dumpsys tv_input                          > "$B/dumpsys-tv_input.txt" 2>&1 |
 tsh ime list -s                               > "$B/ime.txt"
 home; shot before-home > "$B/screenshot-path.txt"
 cp "$(cat "$B/screenshot-path.txt")" "$B/home-before.png"
-ln -sfn "$B" "$STATE/backup/latest"
+# Plain text pointers instead of symlinks (symlinks don't work in Git Bash on Windows).
+# ORIGINAL is written once: restore.sh always compares against the state before any change.
+[ -f "$STATE/backup/ORIGINAL" ] || echo "$B" > "$STATE/backup/ORIGINAL"
+echo "$B" > "$STATE/backup/LATEST"
 echo "Backup written to $B"
 wc -l "$B"/packages-*.txt
 echo "Current home screen: $(cat "$B/home-activity.txt")"

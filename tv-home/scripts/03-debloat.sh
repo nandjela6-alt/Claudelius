@@ -6,7 +6,7 @@ source "$(dirname "$0")/lib.sh"
 LIST="${1:?usage: $0 <package-list-file> [--dry-run]}"
 DRY="${2:-}"
 connect
-[ -d "$STATE/backup/latest" ] || { echo "No backup found. Run 01-backup.sh first." >&2; exit 1; }
+[ -n "$(original_backup)" ] || { echo "No backup found. Run 01-backup.sh first." >&2; exit 1; }
 
 done_n=0; skip_n=0
 while read -r line; do
